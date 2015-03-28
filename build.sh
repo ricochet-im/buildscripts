@@ -5,9 +5,9 @@ set -e
 ROOT_SRC=`pwd`/src
 ROOT_LIB=`pwd`/lib
 
-QT_TAG=v5.3.1
-OPENSSL_TAG=OpenSSL_1_0_1h
-TOR_BRANCH=origin/release-0.2.4
+QT_TAG=v5.4.1
+OPENSSL_TAG=OpenSSL_1_0_1m
+TOR_BRANCH=origin/release-0.2.6
 
 test -e ${ROOT_LIB}/qt5 && rm -r ${ROOT_LIB}/qt5
 test -e ${ROOT_LIB}/openssl && rm -r ${ROOT_LIB}/openssl
