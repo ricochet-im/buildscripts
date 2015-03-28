@@ -9,6 +9,9 @@ QT_TAG=v5.3.1
 OPENSSL_TAG=OpenSSL_1_0_1h
 TOR_BRANCH=origin/release-0.2.4
 
+test -e ${ROOT_LIB}/qt5 && rm -r ${ROOT_LIB}/qt5
+test -e ${ROOT_LIB}/openssl && rm -r ${ROOT_LIB}/openssl
+
 cd $ROOT_SRC
 
 # Build Qt
@@ -16,7 +19,7 @@ cd qt5
 git fetch
 git checkout ${QT_TAG}
 git submodule update
-./configure -opensource -confirm-license -static -no-qml-debug -no-pkg-config -qt-zlib -qt-libpng -qt-libjpeg -qt-freetype -no-nis -no-openssl -qt-pcre -qt-xcb -qt-xkbcommon -nomake tests -nomake examples -no-cups -prefix "${ROOT_LIB}/qt5/"
+./configure -opensource -confirm-license -static -no-qml-debug -qt-zlib -qt-libpng -qt-libjpeg -qt-freetype -no-nis -no-openssl -qt-pcre -qt-xcb -qt-xkbcommon -nomake tests -nomake examples -no-cups -prefix "${ROOT_LIB}/qt5/"
 time make -j9
 make install
 cd ..
