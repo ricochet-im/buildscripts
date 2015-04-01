@@ -3,7 +3,7 @@ set -e
 ROOT_SRC=`pwd`/src
 ROOT_LIB=`pwd`/lib
 BUILD_OUTPUT=`pwd`/output
-test -e ${ROOT_SRC} || mkdir src
+test -e ${ROOT_SRC}
 test -e ${ROOT_LIB} && rm -r ${ROOT_LIB}
 mkdir ${ROOT_LIB}
 test -e ${BUILD_OUTPUT} && rm -r ${BUILD_OUTPUT}
@@ -13,11 +13,13 @@ mkdir ${BUILD_OUTPUT}
 cd $ROOT_SRC
 
 # Openssl
-	# CRLF can break a perl script used by openssl's build
-#	git config core.autocrlf false
-#	git reset --hard
-
 cd openssl
+# CRLF can break a perl script used by openssl's build; reset core.autocrlf on this repo
+if [ "`git config core.autocrlf`" != "false" ]; then
+	echo "Fixing core.autocrlf on OpenSSL repository"
+	git config core.autocrlf false
+	git rm --cached -r .
+fi
 git clean -dfx .
 git reset --hard
 ./config no-shared no-zlib --prefix="${ROOT_LIB}/openssl/"
