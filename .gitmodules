@@ -7,3 +7,6 @@
 [submodule "src/protobuf"]
 	path = src/protobuf
 	url = https://github.com/google/protobuf.git
+[submodule "src/qt5"]
+	path = src/qt5
+	url = https://github.com/qtproject/qt5.git
