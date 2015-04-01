@@ -1,0 +1,9 @@
+[submodule "src/openssl"]
+	path = src/openssl
+	url = https://github.com/openssl/openssl.git
+[submodule "src/tor"]
+	path = src/tor
+	url = https://git.torproject.org/tor.git
+[submodule "src/protobuf"]
+	path = src/protobuf
+	url = https://github.com/google/protobuf.git
