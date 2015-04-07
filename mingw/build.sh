@@ -17,7 +17,7 @@ cd ricochet
 test -e build && rm -r build
 mkdir build
 cd build
-qmake CONFIG+=release OPENSSLDIR="${ROOT_LIB}/openssl/" PROTOBUFDIR="${ROOT_LIB}/protobuf/" DEFINES+=PROTOCOL_NEW ..
+qmake CONFIG+=release OPENSSLDIR="${ROOT_LIB}/openssl/" PROTOBUFDIR="${ROOT_LIB}/protobuf/" ..
 make
 cp release/ricochet.exe ${BUILD_OUTPUT}/
 
@@ -25,7 +25,7 @@ mkdir installer
 cd installer
 cp ${BUILD_OUTPUT}/ricochet.exe .
 cp ${BUILD_OUTPUT}/tor.exe .
-windeployqt --qmldir ../../src/ui/qml --dir Qt ricochet.exe 
+windeployqt --qmldir ../../src/ui/qml --dir Qt ricochet.exe
 test -e Qt/qmltooling && rm -r Qt/qmltooling
 cp ../../packaging/installer/* .
 iscc installer.iss
