@@ -23,7 +23,7 @@ fi
 git clean -dfx .
 git reset --hard
 ./config no-shared no-zlib --prefix="${ROOT_LIB}/openssl/"
-make
+make -j1
 make install
 cd ..
 
@@ -33,7 +33,7 @@ git clean -dfx .
 git reset --hard
 ./autogen.sh
 LIBS+=-lcrypt32 ./configure --prefix="${ROOT_LIB}/tor" --with-openssl-dir="${ROOT_LIB}/openssl/" --with-libevent-dir=`pkg-config --variable=libdir libevent` --with-zlib-dir=`pkg-config --variable=libdir zlib` --enable-static-tor --disable-asciidoc
-make
+make ${MAKEOPTS}
 make install
 cp ${ROOT_LIB}/tor/bin/tor.exe ${BUILD_OUTPUT}/
 cd ..
@@ -44,9 +44,10 @@ git clean -dfx .
 git reset --hard
 ./autogen.sh
 ./configure --prefix="${ROOT_LIB}/protobuf/" --disable-shared --without-zlib
-make
+make ${MAKEOPTS}
 make install
 cd ..
 
 cd ..
 echo "build-deps: done"
+

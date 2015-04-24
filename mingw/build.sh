@@ -18,7 +18,7 @@ test -e build && rm -r build
 mkdir build
 cd build
 qmake CONFIG+=release OPENSSLDIR="${ROOT_LIB}/openssl/" PROTOBUFDIR="${ROOT_LIB}/protobuf/" ..
-make
+make ${MAKEOPTS}
 cp release/ricochet.exe ${BUILD_OUTPUT}/
 
 mkdir installer
