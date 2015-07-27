@@ -10,13 +10,12 @@ test -e ${BUILD_OUTPUT} && rm -r ${BUILD_OUTPUT}
 mkdir ${BUILD_OUTPUT}
 
 # Build dependencies
+git submodule update --init
 cd $ROOT_SRC
 
 # Qt
 cd qt5
-if [ ! -e qtbase/src ]; then
-    git submodule update --init qtbase qtdeclarative qtgraphicaleffects qtimageformats qtquickcontrols qtsvg qtx11extras qttools
-fi
+git submodule update --init qtbase qtdeclarative qtgraphicaleffects qtimageformats qtquickcontrols qtsvg qtx11extras qttools
 git submodule foreach git clean -dfx .
 git submodule foreach git reset --hard
 ./configure -opensource -confirm-license -static -no-qml-debug -qt-zlib -qt-libpng -qt-libjpeg -qt-freetype -no-nis -no-openssl -qt-pcre -qt-xcb -qt-xkbcommon -nomake tests -nomake examples -no-cups -prefix "${ROOT_LIB}/qt5/"

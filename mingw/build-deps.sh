@@ -10,6 +10,7 @@ test -e ${BUILD_OUTPUT} && rm -r ${BUILD_OUTPUT}
 mkdir ${BUILD_OUTPUT}
 
 # Build dependencies
+git submodule update --init src/{openssl,tor,protobuf}
 cd $ROOT_SRC
 
 # Openssl
