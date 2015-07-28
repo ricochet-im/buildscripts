@@ -1,0 +1,104 @@
+From 530dc87eea0f74cb0b440efabc3ff494010d7c73 Mon Sep 17 00:00:00 2001
+From: John Brooks <john.brooks@dereferenced.net>
+Date: Tue, 28 Jul 2015 01:27:53 -0600
+Subject: [PATCH] Workarounds for a dynamic opengl build under msys
+
+---
+ configure                                            | 9 +++++++--
+ src/angle/src/compiler/preprocessor/preprocessor.pro | 4 ++--
+ src/angle/src/compiler/translator.pro                | 4 ++--
+ src/angle/src/libGLESv2/libGLESv2.pro                | 2 +-
+ 4 files changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/configure b/configure
+index 8a4c89e..9b7b0b6 100755
+--- a/configure
++++ b/configure
+@@ -1253,7 +1253,7 @@ while [ "$#" -gt 0 ]; do
+     opengl)
+         if  [ "$VAL" = "auto" ] || [ "$VAL" = "desktop" ] ||
+             [ "$VAL" = "yes" ] || [ "$VAL" = "no" ] ||
+-            [ "$VAL" = "es2" ]; then
++            [ "$VAL" = "es2" ] || [ "$VAL" = "dynamic" ]; then
+             CFG_OPENGL="$VAL"
+         else
+             UNKNOWN_OPT=yes
+@@ -6072,6 +6072,11 @@ if [ "$CFG_OPENGL" = "es2" ]; then
+     QT_CONFIG="$QT_CONFIG opengles2"
+ fi
+ 
++if [ "$CFG_OPENGL" = "dynamic" ]; then
++    QCONFIG_FLAGS="$QCONFIG_FLAGS QT_OPENGL_DYNAMIC"
++    QT_CONFIG="$QT_CONFIG dynamicgl"
++fi
++
+ if [ "$CFG_SHARED" = "yes" ]; then
+     QT_CONFIG="$QT_CONFIG shared"
+     QTCONFIG_CONFIG="$QTCONFIG_CONFIG shared"
+@@ -7077,7 +7082,7 @@ report_support "    OpenSSL .............." "$CFG_OPENSSL" yes "loading librarie
+ report_support "  NIS ...................." "$CFG_NIS"
+ report_support "  OpenGL / OpenVG:"
+ report_support "    EGL .................." "$CFG_EGL"
+-report_support "    OpenGL ..............." "$CFG_OPENGL" yes "Desktop OpenGL" es2 "OpenGL ES 2.0+"
++report_support "    OpenGL ..............." "$CFG_OPENGL" yes "Desktop OpenGL" es2 "OpenGL ES 2.0+" dynamic "Dynamic"
+ report_support "    OpenVG ..............." "$CFG_OPENVG-$CFG_OPENVG_SHIVA" yes-yes "ShivaVG" yes-no "native"
+ report_support "  PCRE ..................." "$CFG_PCRE" yes "system library" qt "bundled copy"
+ if [ -n "$PKG_CONFIG" ]; then
+diff --git a/src/angle/src/compiler/preprocessor/preprocessor.pro b/src/angle/src/compiler/preprocessor/preprocessor.pro
+index 8c5b155..6961355 100644
+--- a/src/angle/src/compiler/preprocessor/preprocessor.pro
++++ b/src/angle/src/compiler/preprocessor/preprocessor.pro
+@@ -41,14 +41,14 @@ SOURCES += \
+     $$ANGLE_DIR/src/compiler/preprocessor/Token.cpp
+ 
+ # NOTE: 'win_flex' and 'bison' can be found in qt5/gnuwin32/bin
+-flex.commands = $$addGnuPath(win_flex) --noline --nounistd --outfile=${QMAKE_FILE_BASE}.cpp ${QMAKE_FILE_NAME}
++flex.commands = flex --noline --nounistd --outfile=${QMAKE_FILE_BASE}.cpp ${QMAKE_FILE_NAME}
+ flex.output = ${QMAKE_FILE_BASE}.cpp
+ flex.input = FLEX_SOURCES
+ flex.dependency_type = TYPE_C
+ flex.variable_out = GENERATED_SOURCES
+ QMAKE_EXTRA_COMPILERS += flex
+ 
+-bison.commands = $$addGnuPath(win_bison) --no-lines --skeleton=yacc.c  --output=${QMAKE_FILE_BASE}.cpp ${QMAKE_FILE_NAME}
++bison.commands = bison --no-lines --skeleton=yacc.c  --output=${QMAKE_FILE_BASE}.cpp ${QMAKE_FILE_NAME}
+ bison.output = ${QMAKE_FILE_BASE}.cpp
+ bison.input = BISON_SOURCES
+ bison.dependency_type = TYPE_C
+diff --git a/src/angle/src/compiler/translator.pro b/src/angle/src/compiler/translator.pro
+index e9d16ca..86ec287 100644
+--- a/src/angle/src/compiler/translator.pro
++++ b/src/angle/src/compiler/translator.pro
+@@ -163,14 +163,14 @@ SOURCES += \
+ 
+ 
+ # NOTE: 'win_flex' and 'bison' can be found in qt5/gnuwin32/bin
+-flex.commands = $$addGnuPath(win_flex) --noline --nounistd --outfile=${QMAKE_FILE_BASE}_lex.cpp ${QMAKE_FILE_NAME}
++flex.commands = flex --noline --nounistd --outfile=${QMAKE_FILE_BASE}_lex.cpp ${QMAKE_FILE_NAME}
+ flex.output = ${QMAKE_FILE_BASE}_lex.cpp
+ flex.input = FLEX_SOURCES
+ flex.dependency_type = TYPE_C
+ flex.variable_out = GENERATED_SOURCES
+ QMAKE_EXTRA_COMPILERS += flex
+ 
+-bison.commands = $$addGnuPath(win_bison) --no-lines --skeleton=yacc.c --defines=${QMAKE_FILE_BASE}_tab.h \
++bison.commands = bison --no-lines --skeleton=yacc.c --defines=${QMAKE_FILE_BASE}_tab.h \
+                 --output=${QMAKE_FILE_BASE}_tab.cpp ${QMAKE_FILE_NAME}
+ bison.output = ${QMAKE_FILE_BASE}_tab.h
+ bison.input = BISON_SOURCES
+diff --git a/src/angle/src/libGLESv2/libGLESv2.pro b/src/angle/src/libGLESv2/libGLESv2.pro
+index 5979b68..b1e1ce1 100644
+--- a/src/angle/src/libGLESv2/libGLESv2.pro
++++ b/src/angle/src/libGLESv2/libGLESv2.pro
+@@ -555,7 +555,7 @@ angle_d3d11: SHADERS = VS_Passthrough2D \
+ for (SHADER, SHADERS) {
+     INPUT = $$eval($${SHADER}.input)
+     OUT_DIR = $$OUT_PWD/libANGLE/$$relative_path($$dirname($$INPUT), $$ANGLE_DIR/src/libANGLE)/compiled
+-    fxc_$${SHADER}.commands = $$FXC /nologo /E $${SHADER} /T $$eval($${SHADER}.type) /Fh ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
++    fxc_$${SHADER}.commands = $$FXC //nologo //E $${SHADER} //T $$eval($${SHADER}.type) //Fh ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+     fxc_$${SHADER}.output = $$OUT_DIR/$$eval($${SHADER}.output)
+     fxc_$${SHADER}.input = $$INPUT
+     fxc_$${SHADER}.dependency_type = TYPE_C
+-- 
+1.8.5.2.msysgit.0
+

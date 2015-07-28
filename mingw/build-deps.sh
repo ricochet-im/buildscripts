@@ -10,8 +10,23 @@ test -e ${BUILD_OUTPUT} && rm -r ${BUILD_OUTPUT}
 mkdir ${BUILD_OUTPUT}
 
 # Build dependencies
-git submodule update --init src/{openssl,tor,protobuf}
+git submodule update --init
 cd $ROOT_SRC
+
+cd qt5
+git submodule update --init qtbase qtdeclarative qtimageformats qtquickcontrols qttools qttranslations qtwinextras qtmultimedia
+git submodule foreach git clean -dfx .
+git submodule foreach git reset --hard
+cd qtbase
+git apply --ignore-whitespace ${ROOT_SRC}/../mingw/0001-Workarounds-for-a-dynamic-opengl-build-under-msys.patch
+git apply --ignore-whitespace ${ROOT_SRC}/../mingw/0001-fix-visibility-of-bundled-zlib-symbols-with-mingw.patch
+cd ..
+# Prefix needs to use the Windows style, not the mingw converted path
+QT_PREFIX="`cygpath -m ${ROOT_LIB}/qt5/`"
+./configure -prefix ${QT_PREFIX} -release -opensource -confirm-license -no-dbus -no-qml-debug -no-glib -no-openssl -no-fontconfig -no-icu -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -nomake tools -nomake examples -platform win32-g++ -opengl dynamic
+make ${MAKEOPTS}
+make install
+cd ..
 
 # Openssl
 cd openssl
@@ -51,4 +66,3 @@ cd ..
 
 cd ..
 echo "build-deps: done"
-
