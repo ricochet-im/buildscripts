@@ -51,6 +51,15 @@ cd ..
 cd protobuf
 git clean -dfx .
 git reset --hard
+
+# Protobuf will rudely fetch this over HTTP if it isn't present..
+if [ ! -e gtest ]; then
+	git clone https://github.com/google/googletest.git gtest
+	cd gtest
+	git checkout release-1.5.0
+	cd ..
+fi
+
 ./autogen.sh
 ./configure --prefix="${ROOT_LIB}/protobuf/" --disable-shared --without-zlib --with-pic
 make ${MAKEOPTS}
