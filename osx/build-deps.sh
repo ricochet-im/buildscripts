@@ -31,7 +31,7 @@ cd ..
 cd openssl
 git clean -dfx .
 git reset --hard
-./Configure no-shared no-zlib --prefix="${ROOT_LIB}/openssl/" -fPIC darwin64-x86_64-cc
+./Configure no-shared no-zlib --prefix="${ROOT_LIB}/openssl/" -fPIC -mmacosx-version-min=10.7 darwin64-x86_64-cc
 make -j1
 make install
 cd ..
@@ -61,7 +61,7 @@ if [ ! -e gtest ]; then
 fi
 
 ./autogen.sh
-./configure --prefix="${ROOT_LIB}/protobuf/" --disable-shared --without-zlib --with-pic
+CXX=clang++ CXXFLAGS="-mmacosx-version-min=10.7 -stdlib=libc++" ./configure --prefix="${ROOT_LIB}/protobuf/" --disable-shared --without-zlib --with-pic
 make ${MAKEOPTS}
 make install
 cd ..
