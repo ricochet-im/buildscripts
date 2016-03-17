@@ -32,14 +32,18 @@ strip ricochet.app/Contents/MacOS/*
 mv ricochet.app Ricochet.app
 ${ROOT_LIB}/qt5/bin/macdeployqt Ricochet.app -qmldir=../src/ui/qml
 
+cp -R Ricochet.app ${BUILD_OUTPUT}/
+cd ${BUILD_OUTPUT}
+
 if [ ! -z "$CODESIGN_ID" ]; then
     codesign --verbose --sign "$CODESIGN_ID" --deep Ricochet.app
+    # Sign twice to work around a bug(?) that results in the asan library being invalid
+    codesign -f --verbose --sign "$CODESIGN_ID" --deep Ricochet.app
     codesign -vvvv -d Ricochet.app
 fi
 
-cp -R Ricochet.app ${BUILD_OUTPUT}/
 hdiutil create Ricochet.dmg -srcfolder Ricochet.app -format UDZO -volname Ricochet
-cp Ricochet.dmg ${BUILD_OUTPUT}/Ricochet-${RICOCHET_VERSION}.dmg
+mv Ricochet.dmg ${BUILD_OUTPUT}/Ricochet-${RICOCHET_VERSION}.dmg
 
 cd ..
 echo "---------------------"
