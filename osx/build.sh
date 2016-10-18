@@ -13,6 +13,7 @@ cd $ROOT_SRC
 # Ricochet
 test -e ricochet || git clone https://github.com/ricochet-im/ricochet.git
 cd ricochet
+git clean -dfx .
 
 RICOCHET_VERSION=`git describe --tags HEAD`
 

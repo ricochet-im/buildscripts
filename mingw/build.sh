@@ -12,6 +12,7 @@ cd $ROOT_SRC
 # Ricochet
 test -e ricochet || git clone https://github.com/ricochet-im/ricochet.git
 cd ricochet
+git clean -dfx .
 
 test -e build && rm -r build
 mkdir build
