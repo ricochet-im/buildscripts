@@ -10,5 +10,5 @@ apt-get install -y libfontconfig1-dev libglu1-mesa-dev libxrender-dev xkb-data
 apt-get install -y libasound2-dev
 
 # Tor
-apt-get install -y autoconf automake libevent-dev
+apt-get install -y autoconf automake
 
