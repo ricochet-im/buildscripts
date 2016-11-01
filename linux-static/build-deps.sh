@@ -32,12 +32,22 @@ make -j1
 make install
 cd ..
 
+# Libevent
+cd libevent
+git clean -dfx .
+git reset --hard
+./autogen.sh
+./configure --prefix="${ROOT_LIB}/libevent"
+make ${MAKEOPTS}
+make install
+cd ..
+
 # Tor
 cd tor
 git clean -dfx .
 git reset --hard
 ./autogen.sh
-CFLAGS=-fPIC ./configure --prefix="${ROOT_LIB}/tor" --with-openssl-dir="${ROOT_LIB}/openssl/" --with-libevent-dir=`pkg-config --variable=libdir libevent` --with-zlib-dir=`pkg-config --variable=libdir zlib` --enable-static-openssl --enable-static-libevent --disable-asciidoc
+CFLAGS=-fPIC ./configure --prefix="${ROOT_LIB}/tor" --with-openssl-dir="${ROOT_LIB}/openssl/" --with-libevent-dir="${ROOT_LIB}/libevent/" --with-zlib-dir=`pkg-config --variable=libdir zlib` --enable-static-tor --disable-asciidoc
 make ${MAKEOPTS}
 make install
 cp ${ROOT_LIB}/tor/bin/tor ${BUILD_OUTPUT}/

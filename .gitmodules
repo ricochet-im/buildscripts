@@ -10,3 +10,6 @@
 [submodule "src/qt5"]
 	path = src/qt5
 	url = https://github.com/qtproject/qt5.git
+[submodule "src/libevent"]
+	path = src/libevent
+	url = https://github.com/libevent/libevent
