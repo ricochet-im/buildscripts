@@ -13,6 +13,7 @@ mkdir ${BUILD_OUTPUT}
 git submodule update --init
 cd $ROOT_SRC
 
+# Qt
 cd qt5
 git submodule update --init qtbase qtdeclarative qtimageformats qtquickcontrols qttools qttranslations qtwinextras qtmultimedia
 git submodule foreach git clean -dfx .
@@ -24,6 +25,15 @@ cd ..
 # Prefix needs to use the Windows style, not the mingw converted path
 QT_PREFIX="`cygpath -m ${ROOT_LIB}/qt5/`"
 ./configure -prefix ${QT_PREFIX} -release -opensource -confirm-license -no-dbus -no-qml-debug -no-glib -no-openssl -no-fontconfig -no-icu -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -nomake tools -nomake examples -platform win32-g++ -opengl dynamic
+make ${MAKEOPTS}
+make install
+cd ..
+
+# Qt Declarative 2D Renderer
+cd qtdeclarative-render2d
+git clean -dfx .
+git reset --hard
+"${ROOT_LIB}/qt5/bin/qmake"
 make ${MAKEOPTS}
 make install
 cd ..

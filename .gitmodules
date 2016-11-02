@@ -13,3 +13,6 @@
 [submodule "src/libevent"]
 	path = src/libevent
 	url = https://github.com/libevent/libevent
+[submodule "src/qtdeclarative-render2d"]
+	path = src/qtdeclarative-render2d
+	url = https://code.qt.io/qt/qtdeclarative-render2d.git

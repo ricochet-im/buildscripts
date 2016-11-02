@@ -26,6 +26,15 @@ make ${MAKEOPTS}
 make install
 cd ..
 
+# Qt Declarative 2D Renderer
+cd qtdeclarative-render2d
+git clean -dfx .
+git reset --hard
+"${ROOT_LIB}/qt5/bin/qmake"
+make ${MAKEOPTS}
+make install
+cd ..
+
 # Openssl
 cd openssl
 git clean -dfx .
