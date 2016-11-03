@@ -18,7 +18,7 @@ cd qt5
 git submodule update --init qtbase qtdeclarative qtgraphicaleffects qtimageformats qtquickcontrols qtsvg qtx11extras qttools qtmultimedia
 git submodule foreach git clean -dfx .
 git submodule foreach git reset --hard
-./configure -opensource -confirm-license -static -no-qml-debug -qt-zlib -qt-libpng -qt-libjpeg -qt-freetype -no-nis -no-openssl -qt-pcre -qt-xcb -qt-xkbcommon -nomake tests -nomake examples -no-cups -prefix "${ROOT_LIB}/qt5/"
+./configure -opensource -confirm-license -static -no-qml-debug -qt-zlib -qt-libpng -qt-libjpeg -qt-freetype -no-openssl -qt-pcre -qt-xcb -qt-xkbcommon -nomake tests -nomake examples -no-cups -prefix "${ROOT_LIB}/qt5/"
 make ${MAKEOPTS}
 make install
 cd ..
@@ -36,7 +36,7 @@ cd ..
 cd openssl
 git clean -dfx .
 git reset --hard
-./config no-shared no-zlib --prefix="${ROOT_LIB}/openssl/" -fPIC
+./config no-shared no-zlib no-dso --prefix="${ROOT_LIB}/openssl/" -fPIC
 make -j1
 make install
 cd ..
@@ -46,7 +46,7 @@ cd libevent
 git clean -dfx .
 git reset --hard
 ./autogen.sh
-./configure --prefix="${ROOT_LIB}/libevent"
+./configure --prefix="${ROOT_LIB}/libevent" --disable-openssl
 make ${MAKEOPTS}
 make install
 cd ..
