@@ -19,7 +19,7 @@ git submodule update --init qtbase qtdeclarative qtgraphicaleffects qtimageforma
 git submodule foreach git clean -dfx .
 git submodule foreach git reset --hard
 ./configure -opensource -confirm-license -release \
-    -no-qml-debug -no-dbus -no-openssl -no-cups -no-nis \
+    -no-qml-debug -no-dbus -no-openssl -no-cups \
     -qt-zlib -qt-libpng -qt-libjpeg -qt-freetype -qt-pcre \
     -nomake tests -nomake examples \
     -prefix "${ROOT_LIB}/qt5/"
