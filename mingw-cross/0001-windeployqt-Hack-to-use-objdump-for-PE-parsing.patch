@@ -85,7 +85,7 @@ index a29b38b..dcf9bb3 100644
 +
 +    QStringList libs;
 +    QByteArray prefix("\tDLL Name: ");
-+    for (const QByteArray &line : output.split('\n'))
++    foreach (const QByteArray &line, output.split('\n'))
 +        libs << QString::fromLatin1(line.mid(prefix.size()).trimmed());
 +
 +    // XXX Assuming 32bit
