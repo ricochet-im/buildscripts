@@ -14,6 +14,8 @@ mingw32-filesystem mingw32-crt mingw32-headers mingw32-bintuils mingw32-cpp ming
 mingw32-pkg-config mingw32-zlib-static mingw32-winpthreads-static
 ```
 
+The `0001-windeployqt-Hack-to-use-objdump-for-PE-parsing.patch` patch assumes a 32bit release build, and assumes that compiler library DLLs are in `/usr/i686-w64-mingw32/sys-root/mingw/bin/`. If these aren't true, you should modify the patch. A better solution is needed here.
+
 Build dependencies
 ------------------
 
