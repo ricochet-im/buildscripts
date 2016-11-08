@@ -49,17 +49,18 @@ cd ..
 cd libevent
 git clean -dfx .
 git reset --hard
+git apply "${ROOT_SRC}/../osx/libevent-0001-Forcefully-disable-clock_gettime-on-macOS-due-to-a-S.patch"
 ./autogen.sh
-./configure --prefix="${ROOT_LIB}/libevent" --disable-openssl
+CFLAGS="-mmacosx-version-min=10.7" ./configure --prefix="${ROOT_LIB}/libevent" --disable-openssl
 make ${MAKEOPTS}
 make install
 cd ..
-fi
 
 # Tor
 cd tor
 git clean -dfx .
 git reset --hard
+git apply "${ROOT_SRC}/../osx/tor-0001-Forcefully-disable-getentropy-and-clock_gettime-on-m.patch"
 ./autogen.sh
 CFLAGS="-fPIC -mmacosx-version-min=10.7" ./configure --prefix="${ROOT_LIB}/tor" --with-openssl-dir="${ROOT_LIB}/openssl/" --with-libevent-dir="${ROOT_LIB}/libevent/" --enable-static-openssl --enable-static-libevent --disable-asciidoc
 make ${MAKEOPTS}
